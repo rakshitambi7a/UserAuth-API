@@ -1,0 +1,29 @@
+# Development dependencies
+# Install with: pip install -r requirements-dev.txt
+
+# Testing
+pytest>=7.0.0
+pytest-flask>=1.2.0
+requests>=2.31.0
+
+# Code formatting
+black>=22.0.0
+isort>=5.10.0
+
+# Linting
+flake8>=4.0.0
+pylint>=2.12.0
+
+# Type checking
+mypy>=0.950
+
+# Environment management
+python-dotenv>=0.19.0
+
+# Additional dependencies for improved architecture
+dataclasses-json>=0.5.7  # For better data serialization
+dependency-injector>=4.41.0  # Professional DI container
+Flask==2.3.2
+Werkzeug==2.3.6
+Flask-Limiter==3.5.0
+PyJWT==2.8.0
