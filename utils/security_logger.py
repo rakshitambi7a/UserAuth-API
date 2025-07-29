@@ -12,7 +12,7 @@ class SecurityLogger:
     Provides JSON-formatted logs for security monitoring and audit trails.
     """
     
-    def __init__(self, log_file: str = None, log_level: str = "INFO"):
+    def __init__(self, log_file: Optional[str] = None, log_level: str = "INFO"):
         self.logger = logging.getLogger('security')
         
         # Suppress logging during tests
@@ -73,7 +73,7 @@ class SecurityLogger:
         
         return context
     
-    def log_security_event(self, event_type: str, details: Dict[str, Any] = None, level: str = "INFO"):
+    def log_security_event(self, event_type: str, details: Optional[Dict[str, Any]] = None, level: str = "INFO"):
         """
         Log a security event with structured data.
         
@@ -93,7 +93,7 @@ class SecurityLogger:
         log_level = getattr(logging, level.upper(), logging.INFO)
         self.logger.log(log_level, log_message)
     
-    def log_login_attempt(self, email: str, success: bool, failure_reason: str = None):
+    def log_login_attempt(self, email: str, success: bool, failure_reason: Optional[str] = None):
         """Log login attempt with outcome."""
         details = {
             'email': email,
@@ -104,7 +104,7 @@ class SecurityLogger:
         level = "INFO" if success else "WARNING"
         self.log_security_event('login_attempt', details, level)
     
-    def log_rate_limit_violation(self, limit_type: str, email: str = None):
+    def log_rate_limit_violation(self, limit_type: str, email: Optional[str] = None):
         """Log rate limit violation."""
         details = {
             'limit_type': limit_type,
@@ -113,7 +113,7 @@ class SecurityLogger:
         
         self.log_security_event('rate_limit_violation', details, "WARNING")
     
-    def log_token_event(self, event: str, user_id: int = None, reason: str = None):
+    def log_token_event(self, event: str, user_id: Optional[int] = None, reason: Optional[str] = None):
         """Log JWT token events (generation, validation, expiration)."""
         details = {
             'token_event': event,
@@ -124,7 +124,7 @@ class SecurityLogger:
         level = "INFO" if event == "generated" else "WARNING"
         self.log_security_event('token_event', details, level)
     
-    def log_authentication_failure(self, reason: str, email: str = None):
+    def log_authentication_failure(self, reason: str, email: Optional[str] = None):
         """Log authentication failures."""
         details = {
             'reason': reason,
@@ -132,6 +132,46 @@ class SecurityLogger:
         }
         
         self.log_security_event('authentication_failure', details, "WARNING")
+    
+    def log_email_sent(self, to_email: str, method: str):
+        """Log email sending events."""
+        details = {
+            'to_email': to_email,
+            'method': method
+        }
+        
+        self.log_security_event('email_sent', details, "INFO")
+    
+    def log_email_error(self, to_email: str, error: str):
+        """Log email sending errors."""
+        details = {
+            'to_email': to_email,
+            'error': error
+        }
+        
+        self.log_security_event('email_error', details, "ERROR")
+    
+    def log_password_reset_request(self, email: str, success: bool, reason: Optional[str] = None):
+        """Log password reset request attempts."""
+        details = {
+            'email': email,
+            'success': success,
+            'reason': reason
+        }
+        
+        level = "INFO" if success else "WARNING"
+        self.log_security_event('password_reset_request', details, level)
+    
+    def log_password_reset_completion(self, email: str, success: bool, reason: Optional[str] = None):
+        """Log password reset completion attempts."""
+        details = {
+            'email': email,
+            'success': success,
+            'reason': reason
+        }
+        
+        level = "INFO" if success else "WARNING"
+        self.log_security_event('password_reset_completion', details, level)
 
 # Global security logger instance
 def get_security_logger() -> SecurityLogger:
@@ -143,7 +183,7 @@ def get_security_logger() -> SecurityLogger:
     
     return get_security_logger._instance
 
-def log_security_event(event_type: str, details: Dict[str, Any] = None, level: str = "INFO"):
+def log_security_event(event_type: str, details: Optional[Dict[str, Any]] = None, level: str = "INFO"):
     """Convenience function for logging security events."""
     logger = get_security_logger()
     logger.log_security_event(event_type, details, level)

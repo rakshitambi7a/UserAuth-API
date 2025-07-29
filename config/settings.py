@@ -48,6 +48,20 @@ class BaseConfig:
     RATELIMIT_STORAGE_URL = os.environ.get('RATELIMIT_STORAGE_URL', 'memory://')
     RATELIMIT_DEFAULT = os.environ.get('RATELIMIT_DEFAULT', '100/hour')
     RATELIMIT_LOGIN = os.environ.get('RATELIMIT_LOGIN', '5/minute')
+    
+    # Email Configuration
+    SMTP_SERVER = os.environ.get('SMTP_SERVER', 'smtp.gmail.com')
+    SMTP_PORT = int(os.environ.get('SMTP_PORT', 587))
+    SMTP_USERNAME = os.environ.get('SMTP_USERNAME', '')
+    SMTP_PASSWORD = os.environ.get('SMTP_PASSWORD', '')
+    FROM_EMAIL = os.environ.get('FROM_EMAIL', SMTP_USERNAME)
+    FROM_NAME = os.environ.get('FROM_NAME', 'User Auth API')
+    
+    # Application URLs
+    APP_BASE_URL = os.environ.get('APP_BASE_URL', 'http://localhost:5000')
+    
+    # Password Reset Configuration
+    PASSWORD_RESET_TOKEN_EXPIRY_HOURS = int(os.environ.get('PASSWORD_RESET_TOKEN_EXPIRY_HOURS', 1))
 
 
 class DevelopmentConfig(BaseConfig):
