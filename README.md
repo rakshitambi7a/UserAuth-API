@@ -1,4 +1,4 @@
-# User Management API - Legacy System Modernization
+# User Management API 
 
 ## Project Overview
 
